@@ -1,5 +1,5 @@
 
-class Trans #(parameter DATA_WIDTH=8) ;
+class uart_Transaction #(parameter DATA_WIDTH=8) ;
   
        rand logic [DATA_WIDTH-1:0] data;
        rand logic Mon_direction;

@@ -1,7 +1,7 @@
 typedef enum {MASTER,SLAVE} agent_typee;
 typedef enum {ODD,EVEN,NONE} parity_type;
 
-class Agent_config #(parameter DATA_WIDTH=8) ;
+class uart_Agent_config #(parameter DATA_WIDTH=8) ;
   
     virtual interface UART_if   vif;
     bit is_active =1 ;

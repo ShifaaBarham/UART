@@ -2,17 +2,17 @@ class Monitor #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL
   
   
     virtual interface valid_ready_if #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) vif;
-    mailbox #(Trans #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) mon_mbx;
+    mailbox #(vr_Transaction #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) vr_mon_mbx;
     
     function new( virtual interface valid_ready_if #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)  vif,
-                  mailbox #(Trans#( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) mon_mbx);
+                  mailbox #(vr_Transaction#( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) vr_mon_mbx);
       
           this.vif=vif;
-          this.mon_mbx=mon_mbx;
+          this.vr_mon_mbx=vr_mon_mbx;
       endfunction
       
     task run();
-      Trans #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) t;
+      vr_Transaction #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) t;
       forever 
         begin 
           @(posedge vif.clk);
@@ -22,7 +22,7 @@ class Monitor #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL
                  t.data=vif.data;
                  t.ctrl=vif.ctrl;
                  t.addr=vif.addr;
-                 mon_mbx.put(t);
+                 vr_mon_mbx.put(t);
                end
              
            end 

@@ -1,5 +1,5 @@
 
-class Trans #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=8) ;
+class vr_Transaction #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=8) ;
   
  rand logic [DATA_WIDTH-1:0] data;
  rand logic [CTRL_WIDTH-1:0]  ctrl;

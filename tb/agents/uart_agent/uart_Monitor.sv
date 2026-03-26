@@ -2,21 +2,21 @@ class Monitor #(parameter DATA_WIDTH=8);
   
   
     virtual interface UART_if #( DATA_WIDTH) vif;
-    mailbox #(Trans #( DATA_WIDTH)) mon_mbx;
-    Agent_config #( DATA_WIDTH) cfg;
+    mailbox #(uart_Transaction #( DATA_WIDTH)) uart_mon_mbx;
+    uart_Agent_config #( DATA_WIDTH) cfg;
 
       
     function new( virtual interface UART_if #( DATA_WIDTH)  vif,
-                  mailbox #(Trans#( DATA_WIDTH)) mon_mbx,
-                  Agent_config #( DATA_WIDTH) cfg);
+                  mailbox #(uart_Transaction #( DATA_WIDTH)) uart_mon_mbx,
+                  uart_Agent_config #( DATA_WIDTH) cfg);
       
           this.vif=vif;
-          this.mon_mbx=mon_mbx;
+          this.uart_mon_mbx=uart_mon_mbx;
           this.cfg=cfg; 
       endfunction
       
     task run();
-      Trans #( DATA_WIDTH) t;
+      uart_Transaction #( DATA_WIDTH) t;
       int unsigned clks_per_bit;
       int unsigned half_clks;
       int total_bytes = DATA_WIDTH / 8;
@@ -86,7 +86,7 @@ class Monitor #(parameter DATA_WIDTH=8);
                 repeat(clks_per_bit) @(posedge vif.clk);
             end
             
-            mon_mbx.put(t);
+            uart_mon_mbx.put(t);
         end 
     endtask
 endclass

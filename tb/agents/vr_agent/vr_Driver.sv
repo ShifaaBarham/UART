@@ -2,21 +2,21 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
   
   
      virtual interface valid_ready_if #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)  vif;
-     mailbox #(Trans#( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) drv_mbx;
-     Agent_config #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) cfg;
+     mailbox #(vr_Transaction #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) vr_drv_mbx;
+     vr_Agent_config #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) cfg;
     
     
        function new( virtual interface valid_ready_if #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) vif, 
-                     mailbox #(Trans #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) drv_mbx,
-                     Agent_config #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) cfg);
+                     mailbox #(vr_Transaction #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) vr_drv_mbx,
+                     vr_Agent_config #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) cfg);
             this.vif=vif;
-            this.drv_mbx=drv_mbx;
+            this.vr_drv_mbx=vr_drv_mbx;
             this.cfg=cfg;
       
       endfunction
       
     task run();
-      Trans #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) t;
+      vr_Transaction #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) t;
        
       if(cfg.agent_type==MASTER)
         begin 
@@ -34,7 +34,7 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
           
           if(cfg.agent_type==MASTER)
             begin
-               drv_mbx.get(t);
+               vr_drv_mbx.get(t);
                  @(posedge vif.clk);
                  
                   vif.data<=t.data;
@@ -52,7 +52,7 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
          
           else 
             begin
-              drv_mbx.get(t);
+              vr_drv_mbx.get(t);
               vif.ready<=0;
               repeat(t.ready_delay) @(posedge vif.clk);
              

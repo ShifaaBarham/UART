@@ -2,23 +2,23 @@ class Driver #(parameter DATA_WIDTH=8) ;
   
   
      virtual interface UART_if #( DATA_WIDTH)  vif;
-     mailbox #(Trans#( DATA_WIDTH)) drv_mbx;
-     Agent_config #( DATA_WIDTH) cfg;
+     mailbox #(uart_Transaction #( DATA_WIDTH)) uart_drv_mbx;
+     uart_Agent_config #( DATA_WIDTH) cfg;
     
        
    
        function new( virtual interface UART_if #( DATA_WIDTH) vif, 
-                     mailbox #(Trans #( DATA_WIDTH)) drv_mbx,
-                     Agent_config #( DATA_WIDTH) cfg);
+                     mailbox #(uart_Transaction #( DATA_WIDTH)) uart_drv_mbx,
+                     uart_Agent_config #( DATA_WIDTH) cfg);
          
             this.vif=vif;
-            this.drv_mbx=drv_mbx;
+            this.uart_drv_mbx=uart_drv_mbx;
             this.cfg=cfg;
       
       endfunction
       
     task run();
-      Trans #( DATA_WIDTH) t;
+      uart_Transaction #( DATA_WIDTH) t;
       int total_bytes=DATA_WIDTH/8;
       logic [7:0] current_byte;
       logic calc_parity;
@@ -32,7 +32,7 @@ class Driver #(parameter DATA_WIDTH=8) ;
           if(cfg.agent_type==MASTER)
             begin
               
-          drv_mbx.get(t);
+          uart_drv_mbx.get(t);
           
           repeat(t.tx_delay)  @(posedge vif.clk);
               
