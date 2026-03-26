@@ -25,11 +25,11 @@ class test_baud_rate_sweep extends base_test;
       
       tx_trans = new();
       tx_trans.data = 32'h11223344 + i;
-      env.agt_vr_tx.drv_mbx.put(tx_trans);
-      
+      env.agt_vr_tx.vr_drv_mbx.put(tx_trans);
+
       rx_trans = new();
       rx_trans.data = 8'hAA + i;
-      env.agt_uart_rx.drv_mbx.put(rx_trans);
+      env.agt_uart_rx.uart_drv_mbx.put(rx_trans);
       
       #1500; 
     end

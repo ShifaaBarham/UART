@@ -21,7 +21,7 @@ class test_rx_total_parity_sanity extends base_test;
       rx_trans = new();
       rx_trans.data = 8'h5A; 
       
-      env.agt_uart_rx.drv_mbx.put(rx_trans);
+      env.agt_uart_rx.uart_drv_mbx.put(rx_trans);
       $display("[%0t] [TEST 16] Injected RX Byte %0d.", $time, i);
       
       #20;

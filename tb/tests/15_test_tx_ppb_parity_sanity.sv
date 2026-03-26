@@ -18,7 +18,7 @@ class test_tx_ppb_parity_sanity extends base_test;
     
     tx_trans = new();
     tx_trans.data = 32'hC3C3C3C3;
-    env.agt_vr_tx.drv_mbx.put(tx_trans);
+    env.agt_vr_tx.vr_drv_mbx.put(tx_trans);
     
     $display("[%0t] [TEST 15] Sent 32-bit data (PPB mode). Monitor should check for 4 parity bits .", $time);
     

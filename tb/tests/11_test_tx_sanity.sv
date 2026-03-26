@@ -18,7 +18,7 @@ class test_tx_sanity extends base_test;
       tx_trans = new();
       tx_trans.data = 32'hAABBCC00 + i; 
       
-      env.agt_vr_tx.drv_mbx.put(tx_trans);
+      env.agt_vr_tx.vr_drv_mbx.put(tx_trans);
       $display("[%0t] [TEST 11] Pushed TX Packet %0d to Mailbox", $time, i);
       
       #10; 

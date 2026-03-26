@@ -1,5 +1,4 @@
 
-`include "uart_Transaction.sv"
 class test_rx_sanity extends base_test;
 
   function new( virtual valid_ready_if #(8, 8, 8)  v_cfg,
@@ -20,7 +19,7 @@ class test_rx_sanity extends base_test;
       rx_trans = new();
       rx_trans.data = 8'h50 + i; 
       
-      env.agt_uart_rx.drv_mbx.put(rx_trans);
+      env.agt_uart_rx.uart_drv_mbx.put(rx_trans);
       $display("[%0t] [TEST 12] Pushed RX Byte %0d to Mailbox", $time, i);
       
       #10;

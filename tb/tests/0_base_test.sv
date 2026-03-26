@@ -1,8 +1,4 @@
-`include "vr_Agent_config.sv"
-`include "uart_Agent_config.sv"
-`include "uart_env.sv"
-`include "tests_pkg.sv"
-`include "vr_Transaction.sv"
+
 class base_test;
 
   uart_env env;
