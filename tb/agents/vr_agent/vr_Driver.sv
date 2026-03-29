@@ -21,7 +21,7 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
       if(cfg.agent_type==MASTER)
         begin 
           vif.valid = 0;
-      vif.data  = '0;
+      vif.wdata  = '0;
       vif.ctrl  = '0;
       vif.addr  = '0;
         end
@@ -37,7 +37,7 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
                vr_drv_mbx.get(t);
                  @(posedge vif.clk);
                  
-                  vif.data<=t.data;
+                  vif.wdata<=t.wdata;
                   vif.ctrl<=t.ctrl;
                   vif.addr<=t.addr;
                 vif.valid<=1;
@@ -45,7 +45,7 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
                 @(posedge vif.clk);
                 end
               while(vif.ready ==0) ;
-              @(posedge vif.clk);
+              //@(posedge vif.clk);//لازم تنحذف لأنه ع الأغلب رح تسببلي مشكلة لأنها بتخلي الفاليد تضل 1 بعد ما الريدي يجي 1
 
                 vif.valid<=0;
             end

@@ -10,7 +10,7 @@ class uart_Agent_config #(parameter DATA_WIDTH=8) ;
     int unsigned  cfg_baud_rate = 9600;
     int unsigned tb_clk_freq=100000000;
       
-    parity_type parity_typee=ODD;
+    parity_type parity_typee=EVEN;
     int unsigned  stop_bits=1;
       
       

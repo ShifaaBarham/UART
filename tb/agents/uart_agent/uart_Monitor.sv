@@ -34,10 +34,13 @@ class Monitor #(parameter DATA_WIDTH=8);
             t.detect_checksum_err = 0;
             t.detect_framing_err = 0;
           
+          wait (vif.rx == 1'b0); 
           repeat(half_clks) @(posedge vif.clk);
-            if (vif.rx !== 0) continue;
-            
+          if (vif.rx !== 1'b0) continue; 
           repeat(clks_per_bit) @(posedge vif.clk);
+
+
+
           
           begin 
             

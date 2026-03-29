@@ -84,7 +84,7 @@ class base_test;
         virtual task write_register(bit [7:0] addr, bit [7:0] data);
         vr_Transaction #(8,8,8) write_trans = new();
         write_trans.addr = addr;
-        write_trans.data = data;
+        write_trans.wdata = data;
         write_trans.ctrl = 1; // write
         env.agt_config.vr_drv_mbx.put(write_trans);
         endtask

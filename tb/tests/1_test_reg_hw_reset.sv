@@ -6,6 +6,10 @@ class test_reg_hw_reset extends base_test;
                 virtual UART_if        u_tx,
                 virtual UART_if        u_rx );
     super.new(v_cfg, v_tx, v_rx, u_tx, u_rx);
+    cfg_vr_tx.is_active   = 0;
+    cfg_vr_rx.is_active   = 0;
+    cfg_uart_tx.is_active = 0;
+    cfg_uart_rx.is_active = 0;
   endfunction
 
   virtual task configure_dut(); 
