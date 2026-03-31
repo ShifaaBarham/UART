@@ -6,7 +6,7 @@ class uart_Agent_config #(parameter DATA_WIDTH=8) ;
     virtual interface UART_if   vif;
     bit is_active =1 ; //for tx path or rx path activation
     agnt_type agent_type = MASTER; 
-      
+      bit ppb_enable = 0;
     int unsigned  cfg_baud_rate = 9600;
     int unsigned tb_clk_freq=100000000;
       

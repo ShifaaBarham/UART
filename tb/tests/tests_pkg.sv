@@ -16,6 +16,7 @@ package tests_pkg;
   `include "14_test_tx_total_parity_sanity.sv"
   `include "15_test_tx_ppb_parity_sanity.sv"
   `include "16_test_rx_total_parity_sanity.sv"
+  `include "17_test_rx_ppb_parity_sanity.sv"
   
 
 endpackage
