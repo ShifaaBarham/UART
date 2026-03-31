@@ -24,7 +24,7 @@ class test_baud_rate_sweep extends base_test;
       write_register(8'h24, baud_rates[i]); 
       
       tx_trans = new();
-      tx_trans.data = 32'h11223344 + i;
+      tx_trans.wdata = 32'h11223344 + i;
       env.agt_vr_tx.vr_drv_mbx.put(tx_trans);
 
       rx_trans = new();

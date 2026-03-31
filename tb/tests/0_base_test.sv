@@ -71,8 +71,8 @@ class base_test;
   endtask
 
     virtual task lift_soft_reset();
-        $display("[%0t] [TEST] Lifting Soft Reset (Writing 0x00 to 0x04).", $time);
-        write_register(8'h04, 8'h00);
+        $display("[%0t] [TEST] Lifting Soft Reset.", $time);
+        write_register(8'h04, 8'h01);
         #50;
     endtask
 

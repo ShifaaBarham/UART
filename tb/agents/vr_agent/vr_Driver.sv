@@ -1,4 +1,4 @@
-class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=8) ;
+class vr_Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=8) ;
   
   
      virtual interface valid_ready_if #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)  vif;
@@ -31,10 +31,10 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
     
       forever 
         begin
-          
+         vr_drv_mbx.get(t);
+
           if(cfg.agent_type==MASTER)
             begin
-               vr_drv_mbx.get(t);
                  @(posedge vif.clk);
                  
                   vif.wdata<=t.wdata;
@@ -52,7 +52,6 @@ class Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_
          
           else 
             begin
-              vr_drv_mbx.get(t);
               vif.ready<=0;
               repeat(t.ready_delay) @(posedge vif.clk);
              

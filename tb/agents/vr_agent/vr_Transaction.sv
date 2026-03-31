@@ -3,7 +3,7 @@ class vr_Transaction #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,paramet
   
  rand logic [DATA_WIDTH-1:0] wdata;
 logic [DATA_WIDTH-1:0] rdata;
- rand logic [CTRL_WIDTH-1:0]  ctrl;
+ rand logic [CTRL_WIDTH-1:0]  ctrl;//1 for write and 0 for read
  rand logic [ADDRESS_WIDTH-1:0] addr;
  rand int    ready_delay;
   

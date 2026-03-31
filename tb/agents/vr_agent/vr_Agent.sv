@@ -1,7 +1,7 @@
 class VR_Agent #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=8) ;
   
-  Driver #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) drv;
-  Monitor #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) mon;
+  vr_Driver #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) drv;
+  vr_Monitor #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) mon;
   vr_Agent_config #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) agent_config;
   
   mailbox #(vr_Transaction #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) vr_drv_mbx;

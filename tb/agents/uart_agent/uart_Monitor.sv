@@ -1,4 +1,4 @@
-class Monitor #(parameter DATA_WIDTH=8);
+class uart_Monitor #(parameter DATA_WIDTH=8);
   
   
     virtual interface UART_if #( DATA_WIDTH) vif;
@@ -55,10 +55,10 @@ class Monitor #(parameter DATA_WIDTH=8);
               
                     t.data[(byte_idx*8) +: 8] = current_byte;
                     
-                    if (cfg.parity_typee != NONE) 
+                    if (cfg.parity_mode != NONE) 
                       begin
 
-                        if(cfg.parity_typee == EVEN) expected_parity = ^current_byte;
+                        if(cfg.parity_mode == EVEN) expected_parity = ^current_byte;
                         else expected_parity = ~^current_byte;
                         
                         if (vif.rx !== expected_parity)

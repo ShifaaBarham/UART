@@ -18,7 +18,7 @@ class test_tx_total_parity_sanity extends base_test;
     write_register(8'h14, 8'h00); 
     
     tx_trans = new();
-    tx_trans.data = 32'hA5A5A5A5;
+    tx_trans.wdata = 32'hA5A5A5A5;
     env.agt_vr_tx.vr_drv_mbx.put(tx_trans);
     
     $display("[%0t] [TEST 14] Sent 32-bit data (Total Parity mode). Monitor should check for exactly 1 parity bit at the end.", $time);

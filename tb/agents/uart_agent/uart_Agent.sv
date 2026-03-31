@@ -1,8 +1,8 @@
 
 class UART_Agent #(parameter DATA_WIDTH=8) ;
   
-  Driver #( DATA_WIDTH) drv;
-  Monitor #( DATA_WIDTH) mon;
+  uart_Driver #( DATA_WIDTH) drv;
+  uart_Monitor #( DATA_WIDTH) mon;
   uart_Agent_config #( DATA_WIDTH) agent_config;
   
   virtual interface UART_if #(DATA_WIDTH) vif;

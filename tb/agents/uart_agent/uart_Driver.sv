@@ -1,4 +1,4 @@
-class Driver #(parameter DATA_WIDTH=8) ;
+class uart_Driver #(parameter DATA_WIDTH=8) ;
   
   
      virtual interface UART_if #( DATA_WIDTH)  vif;
@@ -51,8 +51,8 @@ class Driver #(parameter DATA_WIDTH=8) ;
             end
             
           
-            if(cfg.parity_typee !=NONE)begin
-              if(cfg.parity_typee ==EVEN) calc_parity=^current_byte;
+            if(cfg.parity_mode !=NONE)begin
+              if(cfg.parity_mode ==EVEN) calc_parity=^current_byte;
               else 
                 calc_parity= ~^current_byte;
               

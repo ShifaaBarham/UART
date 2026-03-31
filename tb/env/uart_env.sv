@@ -27,6 +27,12 @@ class uart_env;
                 vr_Agent_config   c_v_rx,
                 uart_Agent_config c_u_tx,
                 uart_Agent_config c_u_rx );
+cfg_config.agent_type = MASTER;
+cfg_vr_tx.agent_type  = MASTER;
+cfg_vr_rx.agent_type  = SLAVE;
+
+cfg_uart_tx.is_active = 0;
+cfg_uart_rx.is_active = 1;
 
         this.cfg_config  = c_cfg;
         this.cfg_vr_tx   = c_v_tx;
