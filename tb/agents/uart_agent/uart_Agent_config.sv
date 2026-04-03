@@ -3,7 +3,7 @@ typedef enum {ODD,EVEN,NONE} parity_type;
 
 class uart_Agent_config #(parameter DATA_WIDTH=8) ;
   
-    virtual interface UART_if   vif;
+    virtual interface UART_if #( DATA_WIDTH) vif;
     bit is_active =1 ; //for tx path or rx path activation
     agnt_type agent_type = MASTER; 
       bit ppb_enable = 0;
