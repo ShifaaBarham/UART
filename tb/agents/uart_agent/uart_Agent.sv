@@ -11,8 +11,9 @@ class UART_Agent #(parameter DATA_WIDTH=8) ;
   
   function new(
                uart_Agent_config #( DATA_WIDTH) agent_config,
-               mailbox #(uart_Transaction #( DATA_WIDTH)) uart_drv_mbx = null, // Optional for monitor-only agents
-               mailbox #(uart_Transaction #( DATA_WIDTH)) uart_mon_mbx );
+               mailbox #(uart_Transaction #( DATA_WIDTH)) uart_mon_mbx,
+               mailbox #(uart_Transaction #( DATA_WIDTH)) uart_drv_mbx = null // Optional for monitor-only agents
+ );
        
         this.agent_config=agent_config;
         this.uart_drv_mbx=uart_drv_mbx;

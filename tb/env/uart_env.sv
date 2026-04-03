@@ -65,14 +65,14 @@ class uart_env;
             sb.mbx_vr_rx    = mbx_vr_rx_mon;
             sb.mbx_uart_tx  = mbx_uart_tx_mon;
             sb.mbx_uart_rx  = mbx_uart_rx_mon;
-
+ 
             // Create agents
-            agt_config  = new(cfg_config,  mbx_config_drv,  mbx_config_mon);
-            agt_vr_tx   = new(cfg_vr_tx,   mbx_vr_tx_drv,   mbx_vr_tx_mon);
-            agt_vr_rx   = new(cfg_vr_rx,   mbx_vr_rx_drv,   mbx_vr_rx_mon);
+            agt_config  = new(cfg_config, ,  mbx_config_mon, mbx_config_drv);
+            agt_vr_tx   = new(cfg_vr_tx,   mbx_vr_tx_mon,   mbx_vr_tx_drv);
+            agt_vr_rx   = new(cfg_vr_rx,   mbx_vr_rx_mon,   mbx_vr_rx_drv);
 
             agt_uart_tx = new( cfg_uart_tx, mbx_uart_tx_mon);
-            agt_uart_rx = new( cfg_uart_rx, mbx_uart_rx_drv, mbx_uart_rx_mon);
+            agt_uart_rx = new( cfg_uart_rx, mbx_uart_rx_mon, mbx_uart_rx_drv);
 
   endfunction
             // Run all agents and scoreboard
