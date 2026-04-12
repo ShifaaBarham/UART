@@ -6,7 +6,10 @@ logic [DATA_WIDTH-1:0] rdata;
  rand logic [CTRL_WIDTH-1:0]  ctrl;//1 for write and 0 for read
  rand logic [ADDRESS_WIDTH-1:0] addr;
  rand int    ready_delay;
-  
+ rand int valid_delay;
+  logic rx_err ;
+  logic tx_err ;
+
   function void print();
     $display ("wdata=%0d rdata=%0d ctrl=%0d addr=%0d ",wdata,rdata,ctrl,addr);
     

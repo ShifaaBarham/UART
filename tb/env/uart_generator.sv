@@ -1,22 +1,39 @@
-class uart_generator #(parameter DATA_WIDTH=8);
+class uart_Generator #(parameter DATA_WIDTH=8);
   
-        mailbox #(uart_Transaction #(DATA_WIDTH)) mbx;
-        int num_transactions;
-        
-    function new(mailbox #(uart_Transaction #(DATA_WIDTH)) mbx);
-              this.mbx = mbx;
-            this.num_transactions = 1;
-        endfunction
-        
-    task run();
-            uart_Transaction #(DATA_WIDTH) t;
-             for (int i = 0; i < num_transactions; i++) begin
-               t = new();
-              if (!t.randomize()) begin
-                $error("[%0t] [UART_GEN] Randomization failed!", $time);
-             end
-            mbx.put(t);
-            $display("[%0t] [UART_GEN] Generated Transaction %0d/%0d", $time, i+1, num_transactions);
-            end
-        endtask
+  mailbox #(uart_Transaction #(DATA_WIDTH)) gen2drv;
+
+  function new(mailbox #(uart_Transaction #(DATA_WIDTH)) gen2drv);
+    this.gen2drv = gen2drv;
+  endfunction
+
+  task send_rx_traffic(int num_transactions, 
+                       int parity_err_rate = 0, 
+                       int checksum_err_rate = 0,
+                       int framing_err_rate = 0);
+    
+    uart_Transaction #(DATA_WIDTH) tr;
+    int rand_p, rand_c, rand_f;
+    
+    for(int i=0; i<num_transactions; i++) begin
+      tr = new();
+      
+      // تعيين البيانات عشوائياً باستخدام الدالة المجانية
+      tr.data = $urandom(); 
+      
+      // حساب احتمالية الأخطاء يدوياً
+      rand_p = $urandom_range(0, 99);
+      tr.inject_parity_err = (rand_p < parity_err_rate) ? 1'b1 : 1'b0;
+      
+      rand_c = $urandom_range(0, 99);
+      tr.inject_checksum_err = (rand_c < checksum_err_rate) ? 1'b1 : 1'b0;
+      
+      rand_f = $urandom_range(0, 99);
+      tr.inject_framing_err = (rand_f < framing_err_rate) ? 1'b1 : 1'b0;
+      
+      gen2drv.put(tr);
+    end
+    $display("[%0t] [UART_GEN] Generated %0d RX Trans (ParityErr:%0d%%, ChkErr:%0d%%, FrameErr:%0d%%)", 
+             $time, num_transactions, parity_err_rate, checksum_err_rate, framing_err_rate);
+  endtask
+
 endclass

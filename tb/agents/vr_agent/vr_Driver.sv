@@ -40,7 +40,8 @@ class vr_Driver #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CT
                   vif.wdata<=t.wdata;
                   vif.ctrl<=t.ctrl;
                   vif.addr<=t.addr;
-                vif.valid<=1;
+                  repeat(t.valid_delay) @(posedge vif.clk);
+                    vif.valid<=1;
               do begin 
                 @(posedge vif.clk);
                 end

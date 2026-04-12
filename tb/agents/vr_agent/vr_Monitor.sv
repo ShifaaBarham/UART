@@ -23,6 +23,8 @@ class vr_Monitor #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter C
                  t.rdata = vif.rdata;
                  t.ctrl=vif.ctrl;
                  t.addr=vif.addr;
+                 t.tx_err = vif.tx_err;
+                 t.rx_err = vif.rx_err;
                  vr_mon_mbx.put(t);
                end
              
