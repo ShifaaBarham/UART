@@ -1,0 +1,102 @@
+# ERROR: No extended dataflow license exists
+# do run.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:05:09 on Apr 12,2026
+# vlog -reportprogress 300 -sv "+incdir+./tb/agents/vr_agent" "+incdir+./tb/agents/uart_agent" "+incdir+./tb/env" "+incdir+./tb/tests" ./tb/interfaces/valid_ready_if.sv ./tb/interfaces/UART_if.sv ./tb/agents/vr_agent/vr_agent_pkg.sv ./tb/agents/uart_agent/uart_agent_pkg.sv ./tb/env/env_pkg.sv ./tb/tests/tests_pkg.sv ./DUT/design.sv ./tb/top_tb.sv 
+# -- Compiling interface valid_ready_if
+# -- Compiling interface UART_if
+# -- Compiling package vr_agent_pkg
+# -- Compiling package uart_agent_pkg
+# -- Compiling package env_pkg
+# -- Importing package vr_agent_pkg
+# -- Importing package uart_agent_pkg
+# -- Compiling package tests_pkg
+# -- Importing package env_pkg
+# -- Compiling module cfg
+# -- Compiling module clock_divider
+# -- Compiling module TX
+# -- Compiling module UART
+# -- Compiling package top_tb_sv_unit
+# -- Importing package tests_pkg
+# -- Importing package vr_agent_pkg
+# -- Importing package uart_agent_pkg
+# -- Importing package env_pkg
+# -- Compiling module tb_top
+# 
+# Top level modules:
+# 	tb_top
+# End time: 13:05:09 on Apr 12,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -gui -voptargs=""+acc"" work.tb_top "+TESTNAME=test_config_read_backpressure" 
+# Start time: 13:05:09 on Apr 12,2026
+# Loading sv_std.std
+# Loading work.valid_ready_if
+# Loading work.UART_if
+# Loading work.uart_agent_pkg
+# Loading work.vr_agent_pkg
+# Loading work.env_pkg
+# Loading work.tests_pkg
+# Loading work.top_tb_sv_unit
+# Loading work.tb_top
+# Loading work.UART
+# Loading work.cfg
+# Loading work.clock_divider
+# Loading work.TX
+# [0] [ENV] Building Environment
+# [0] [TEST] Waiting for HW Reset...
+# [0] [SCOREBOARD] Started Successfully
+# [45050] [TEST] Lifting Soft Reset.
+# [45100] [TEST-2] Running: test_reg_rw_access
+# =================================================
+# [95000] [SCB-CFG] SOFT RESET De-asserted!
+# [215000] [SCB-CFG] TX Config updated to: 0xff
+# [535000] [SCB-CFG] RX Config updated to: 0xff
+# [2145000] [SCB-CFG] PASS: TX Config Read = 0xff
+# [2225000] [SCB-CFG] PASS: RX Config Read = 0xff
+# ** Error: [2475000] [SCB-COR] FAIL: RX_ERR_CNT Mismatch! Expected 0, Actual 1.
+#    Time: 2475 ns  Scope: env_pkg.scoreboard.check_and_clear_8bit File: ./tb/env/scoreboard.sv Line: 242
+# [2635000] [SCB-COR] PASS: TX_CNT_LSB Read. Expected 0, Actual 0.
+# [2815000] [SCB-COR] PASS: TX_CNT_MSB Read. Expected 0, Actual 0.
+# [2895000] [SCB-COR] PASS: TX_ERR_CNT Read. Expected 0, Actual 0.
+# [2895500] [TEST-2] RW Access Check Complete.
+# [2900500] [TEST] Simulation Finished.
+# ** Note: $finish    : ./tb/tests/0_base_test.sv(73)
+#    Time: 2900500 ps  Iteration: 0  Instance: /tb_top
+# 1
+# Break in Task tests_pkg/base_test::run at ./tb/tests/0_base_test.sv line 73
+add wave -position insertpoint sim:/tb_top/DUT/*
+run -all
+# [2975000] [SCB-COR] PASS: RX_CNT_LSB Read. Expected 0, Actual 0.
+# [3075000] [SCB-COR] PASS: RX_CNT_MSB Read. Expected 0, Actual 0.
+# Break key hit
+# Simulation stop requested.
+run -all
+# Break key hit
+# Simulation stop requested.
+restart -f
+run -all
+# [0] [ENV] Building Environment
+# [0] [TEST] Waiting for HW Reset...
+# [0] [SCOREBOARD] Started Successfully
+# [45050] [TEST] Lifting Soft Reset.
+# [45100] [TEST-2] Running: test_reg_rw_access
+# =================================================
+# [95000] [SCB-CFG] SOFT RESET De-asserted!
+# [215000] [SCB-CFG] TX Config updated to: 0xff
+# [535000] [SCB-CFG] RX Config updated to: 0xff
+# [2145000] [SCB-CFG] PASS: TX Config Read = 0xff
+# [2225000] [SCB-CFG] PASS: RX Config Read = 0xff
+# ** Error: [2475000] [SCB-COR] FAIL: RX_ERR_CNT Mismatch! Expected 0, Actual 1.
+#    Time: 2475 ns  Scope: env_pkg.scoreboard.check_and_clear_8bit File: ./tb/env/scoreboard.sv Line: 242
+# [2635000] [SCB-COR] PASS: TX_CNT_LSB Read. Expected 0, Actual 0.
+# [2815000] [SCB-COR] PASS: TX_CNT_MSB Read. Expected 0, Actual 0.
+# [2895000] [SCB-COR] PASS: TX_ERR_CNT Read. Expected 0, Actual 0.
+# [2895500] [TEST-2] RW Access Check Complete.
+# [2900500] [TEST] Simulation Finished.
+# ** Note: $finish    : ./tb/tests/0_base_test.sv(73)
+#    Time: 2900500 ps  Iteration: 0  Instance: /tb_top
+# 1
+# Break in Task tests_pkg/base_test::run at ./tb/tests/0_base_test.sv line 73
+# End time: 13:49:11 on Apr 12,2026, Elapsed time: 0:44:02
+# Errors: 2, Warnings: 0
