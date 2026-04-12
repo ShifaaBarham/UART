@@ -1,10 +1,10 @@
 class test_reg_hw_reset extends base_test;
 
-  function new( virtual valid_ready_if v_cfg,
-                virtual valid_ready_if v_tx,
-                virtual valid_ready_if v_rx,
-                virtual UART_if        u_tx,
-                virtual UART_if        u_rx );
+  function new( virtual valid_ready_if #(8,8,1)  v_cfg,
+                virtual valid_ready_if #(32,8,1) v_tx,
+                virtual valid_ready_if #(32,8,1) v_rx,
+                virtual UART_if        #(8)      u_tx,
+                virtual UART_if        #(8)      u_rx );
     super.new(v_cfg, v_tx, v_rx, u_tx, u_rx);
     cfg_vr_tx.is_active   = 0;
     cfg_vr_rx.is_active   = 0;
@@ -23,16 +23,19 @@ class test_reg_hw_reset extends base_test;
     $display("=================================================");
 
     read_register(8'h04); 
-    read_register(8'h14); 
-    read_register(8'h24); 
+   
     
-    read_register(8'h18); 
     read_register(8'h1A); 
     read_register(8'h1C);
 
     read_register(8'h28); 
     read_register(8'h2A); 
+
     read_register(8'h2C);
+
+     read_register(8'h14); 
+    read_register(8'h24); 
+    read_register(8'h18); 
 
     #500;
     $display("[%0t] [TEST-1] Finished checking HW Reset Defaults.", $time);
