@@ -1,11 +1,11 @@
 
 class test_config_write_mid_transaction extends base_test;
 
-  function new( virtual valid_ready_if v_cfg,
-                virtual valid_ready_if v_tx,
-                virtual valid_ready_if v_rx,
-                virtual UART_if        u_tx,
-                virtual UART_if        u_rx );
+  function new( virtual valid_ready_if #(8,8,1)  v_cfg,
+                virtual valid_ready_if #(32,8,1) v_tx,
+                virtual valid_ready_if #(32,8,1) v_rx,
+                virtual UART_if        #(8)      u_tx,
+                virtual UART_if        #(8)      u_rx );
     super.new(v_cfg, v_tx, v_rx, u_tx, u_rx);
   endfunction
 

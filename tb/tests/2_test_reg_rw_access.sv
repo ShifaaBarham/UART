@@ -12,11 +12,9 @@ virtual task main_test();
     $display("[%0t] [TEST-2] Running: test_reg_rw_access", $time);
     $display("=================================================");
 
-    // 1. Write to valid RW Registers
     write_register(8'h14, 8'hFF);
     write_register(8'h24, 8'hFF); 
     
-    // 2. Attempt to write to ALL Read-Only (RO) Registers (Should be ignored)
     write_register(8'h18, 8'hFF); // TX LSB
     write_register(8'h1A, 8'hFF); // TX MSB
     write_register(8'h1C, 8'hFF); // TX ERR
@@ -26,7 +24,6 @@ virtual task main_test();
     write_register(8'h2A, 8'hFF); // RX MSB
 
 
-    // 3. Read back to verify
     read_register(8'h14); // Expected 0xFF
     read_register(8'h24); // Expected 0xFF
      read_register(8'h2C); 

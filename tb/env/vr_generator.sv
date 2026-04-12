@@ -8,7 +8,6 @@ class vr_Generator #(parameter DATA_WIDTH=32, parameter ADDRESS_WIDTH=8, paramet
 
   task write_reg(logic [ADDRESS_WIDTH-1:0] adr, logic [DATA_WIDTH-1:0] dat);
     vr_Transaction #(DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) tr = new();
-    // تعيين مباشر بدون راندومايز
     tr.addr = adr;
     tr.wdata = dat;
     tr.ctrl = 1'b1;
@@ -25,7 +24,6 @@ class vr_Generator #(parameter DATA_WIDTH=32, parameter ADDRESS_WIDTH=8, paramet
     tr.tx_err = 1'b0;
     tr.valid_delay = 0;
     
-    // 2. أهم خطوة: مرر الـ delay للـ Transaction
     tr.ready_delay = r_delay; 
     
     gen2drv.put(tr);
@@ -38,7 +36,7 @@ endtask
       
       tr.addr = 8'h00; 
       tr.ctrl = 1'b1; 
-      tr.wdata = $urandom(); // بيانات عشوائية
+      tr.wdata = $urandom(); 
       
       rand_val = $urandom_range(0, 99);
       tr.tx_err = (rand_val < err_rate) ? 1'b1 : 1'b0;

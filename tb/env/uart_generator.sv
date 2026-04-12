@@ -17,10 +17,8 @@ class uart_Generator #(parameter DATA_WIDTH=8);
     for(int i=0; i<num_transactions; i++) begin
       tr = new();
       
-      // تعيين البيانات عشوائياً باستخدام الدالة المجانية
       tr.data = $urandom(); 
       
-      // حساب احتمالية الأخطاء يدوياً
       rand_p = $urandom_range(0, 99);
       tr.inject_parity_err = (rand_p < parity_err_rate) ? 1'b1 : 1'b0;
       
