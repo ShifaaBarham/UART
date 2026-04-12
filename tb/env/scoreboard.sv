@@ -1,123 +1,137 @@
-   class scoreboard;
+class scoreboard;
 
-        mailbox #(vr_Transaction)   mbx_config;
-        mailbox #(vr_Transaction)   mbx_vr_tx;
-        mailbox #(vr_Transaction)   mbx_vr_rx;
-        mailbox #(uart_Transaction) mbx_uart_tx;
-        mailbox #(uart_Transaction) mbx_uart_rx;
 
-        bit soft_reset_n = 1; // Active Low -> 1 : normal operation, 0 : reset
-        bit [7:0] tx_config = 8'h00; // Default 0x14
-        bit [7:0] rx_config = 8'h01; // Default 0x24
-        
-                int unsigned tx_count = 0;
-                int unsigned tx_err_count = 0;
-                int unsigned rx_count = 0;
-                int unsigned rx_err_count = 0;
+        mailbox #(vr_Transaction #(8,8,1))   mbx_config;
+        mailbox #(vr_Transaction #(32,8,1))  mbx_vr_tx;
+      mailbox #(vr_Transaction #(32,8,1))  mbx_vr_rx;
+        mailbox #(uart_Transaction #(8))     mbx_uart_tx;
+        mailbox #(uart_Transaction #(8))     mbx_uart_rx;
+        bit soft_reset_n = 1; 
+        bit [7:0] tx_config = 8'h18; 
+    bit [7:0] rx_config = 8'h08; 
 
-                function new();
-                endfunction
+      bit [15:0] tx_count = 16'h0000;
+      bit [7:0]  tx_err_count = 8'h00;
+      bit [15:0] rx_count = 16'h0000;
+      bit [7:0]  rx_err_count = 8'h00;
 
-            task run();
-                $display("[%0t] [SCOREBOARD] Started", $time);
-                
-                fork
-                monitor_config();
-                check_tx_path();
-                check_rx_path();
-                join_none
-            endtask
+    //Internal FIFOs 
+   vr_Transaction #(32,8,1)   expected_vr_rx_q[$];
+  uart_Transaction #(8)      expected_uart_tx_q[$];
 
-        task monitor_config();
-            vr_Transaction cfg_trans;
-            forever begin
+      function new();
+      endfunction
+
+          task run();
+              $display("[%0t] [SCOREBOARD] Started Successfully", $time);
+              fork
+                  monitor_config();
+                  predict_tx();
+                  compare_tx();
+                  predict_rx();
+                  compare_rx();
+              join_none
+          endtask
+
+  task monitor_config();
+        vr_Transaction #(8,8,1) cfg_trans;
+        forever begin
             mbx_config.get(cfg_trans);
             
             if (cfg_trans.ctrl == 1) begin 
+                // write op
                 case (cfg_trans.addr)
-                8'h04: begin
-                    soft_reset_n = cfg_trans.wdata[0];
-                    if (soft_reset_n == 0) begin
-                    $display("[%0t] [SCB] SOFT RESET DETECTED! Clearing Counters.", $time);
-                    clear_counters();
+                    8'h04: begin
+                        soft_reset_n = cfg_trans.wdata[0];
+                        if (soft_reset_n == 0) begin
+                            $display("[%0t] [SCB-CFG] SOFT RESET Asserted! Flushing Data Queues.", $time);
+                            expected_uart_tx_q.delete(); 
+                            expected_vr_rx_q.delete();   
+                        end else begin
+                            $display("[%0t] [SCB-CFG] SOFT RESET De-asserted!", $time);
+                        end
                     end
-                end
-                8'h14: tx_config = cfg_trans.wdata;
-                8'h24: rx_config = cfg_trans.wdata;
+                    8'h14: begin 
+                        tx_config = cfg_trans.wdata;
+                        $display("[%0t] [SCB-CFG] TX Config updated to: 0x%0h", $time, tx_config);
+                    end
+                    8'h24: begin 
+                        rx_config = cfg_trans.wdata;
+                        $display("[%0t] [SCB-CFG] RX Config updated to: 0x%0h", $time, rx_config);
+                    end
+                endcase
+            end 
+            else if (cfg_trans.ctrl == 0) begin 
+                case (cfg_trans.addr)
+                  
+                    8'h14: begin
+                        if (cfg_trans.rdata == tx_config) 
+                            $display("[%0t] [SCB-CFG] PASS: TX Config Read = 0x%0h", $time, cfg_trans.rdata);
+                        else 
+                            $error("[%0t] [SCB-CFG] FAIL: TX Config Read Mismatch! Exp: 0x%0h, Act: 0x%0h", $time, tx_config, cfg_trans.rdata);
+                    end
+                    8'h24: begin
+                        if (cfg_trans.rdata == rx_config) 
+                            $display("[%0t] [SCB-CFG] PASS: RX Config Read = 0x%0h", $time, cfg_trans.rdata);
+                        else 
+                            $error("[%0t] [SCB-CFG] FAIL: RX Config Read Mismatch! Exp: 0x%0h, Act: 0x%0h", $time, rx_config, cfg_trans.rdata);
+                    end
+
+                    8'h18: check_and_clear_lsb("TX_CNT_LSB", tx_count, bit'(cfg_trans.rdata[7:0]));
+                    8'h1A: check_and_clear_msb("TX_CNT_MSB", tx_count, bit'(cfg_trans.rdata[7:0]));
+                    8'h1C: check_and_clear_8bit("TX_ERR_CNT", tx_err_count, bit'(cfg_trans.rdata[7:0]));
+                    8'h28: check_and_clear_lsb("RX_CNT_LSB", rx_count, bit'(cfg_trans.rdata[7:0]));
+                    8'h2A: check_and_clear_msb("RX_CNT_MSB", rx_count, bit'(cfg_trans.rdata[7:0]));
+                    8'h2C: check_and_clear_8bit("RX_ERR_CNT", rx_err_count, bit'(cfg_trans.rdata[7:0]));
                 endcase
             end
-            
-            else if (cfg_trans.ctrl == 0) begin
-            end
-            end
-        endtask
+        end
+    endtask
 
-        task check_tx_path();
-            vr_Transaction   vr_in;
-            uart_Transaction uart_out;
-            forever begin
-            mbx_vr_tx.get(vr_in);
-            
-            mbx_uart_tx.get(uart_out);
-            
-        
-            if (soft_reset_n == 1) begin
-                tx_count++; 
-                
-                if (vr_in.wdata == uart_out.data) begin
-                    $display("[%0t] [SCB-TX] PASS: Data matched %0h", $time, vr_in.wdata);
-                end else begin
-                    $error("[%0t] [SCB-TX] FAIL: VR in: %0h, UART out: %0h", $time, vr_in.wdata, uart_out.data);
-                end
+  
+  
+   task predict_tx();
+     
+     
+         endtask
 
-        
-            end
-            end
-        endtask
+     task compare_tx();
 
-        task check_rx_path();
-            uart_Transaction uart_in;
-            vr_Transaction   vr_out;
-            bit has_error;
+     endtask
+  
+  
+      task predict_rx();
+      endtask
+  
+      task compare_rx();
+      endtask
+    function void check_and_clear_8bit(string name, ref bit [7:0] my_count, input bit [7:0] actual_rdata);
+        bit [7:0] exp = my_count; 
+        if (actual_rdata == exp) begin
+            $display("[%0t] [SCB-COR] PASS: %s Read. Expected %0d, Actual %0d.", $time, name, exp, actual_rdata);
+        end else begin
+            $error("[%0t] [SCB-COR] FAIL: %s Mismatch! Expected %0d, Actual %0d.", $time, name, exp, actual_rdata);
+        end 
+        my_count = 8'h00; 
+    endfunction
 
-            forever begin
-            mbx_uart_rx.get(uart_in);
-            
-            has_error = check_for_rx_errors(uart_in); 
+    function void check_and_clear_lsb(string name, ref bit [15:0] my_count, input bit [7:0] actual_rdata);
+        bit [7:0] exp_lsb = my_count[7:0]; 
+        if (actual_rdata == exp_lsb) begin
+            $display("[%0t] [SCB-COR] PASS: %s Read. Expected %0d, Actual %0d.", $time, name, exp_lsb, actual_rdata);
+        end else begin
+            $error("[%0t] [SCB-COR] FAIL: %s Mismatch! Expected %0d, Actual %0d.", $time, name, exp_lsb, actual_rdata);
+        end
+        my_count[7:0] = 8'h00; 
+    endfunction
 
-            if (rx_config[5:4] == 2'b00 && has_error) begin
-                if (soft_reset_n == 1) begin
-                    rx_count++;
-                    rx_err_count++;
-                end
-                $display("[%0t] [SCB-RX] Error dropped by design as configured.", $time);
-            end 
-            else begin
-                mbx_vr_rx.get(vr_out);
-                
-                if (soft_reset_n == 1) begin
-                    rx_count++;
-                    if (has_error) rx_err_count++;
-
-                    if (uart_in.data == vr_out.rdata) begin
-                        $display("[%0t] [SCB-RX] PASS: Data matched %0h", $time, uart_in.data);
-                    end else begin
-                        $error("[%0t] [SCB-RX] FAIL: UART in: %0h, VR out: %0h", $time, uart_in.data, vr_out.rdata);
-                    end
-                end
-            end
-            end
-        endtask
-
-                function void clear_counters();
-                    tx_count = 0;
-                    tx_err_count = 0;
-                    rx_count = 0;
-                    rx_err_count = 0;
-                endfunction
-
-        function bit check_for_rx_errors(uart_Transaction t);
-            return 0; 
-        endfunction
-
-        endclass
+    function void check_and_clear_msb(string name, ref bit [15:0] my_count, input bit [7:0] actual_rdata);
+        bit [7:0] exp_msb = my_count[15:8]; 
+        if (actual_rdata == exp_msb) begin
+            $display("[%0t] [SCB-COR] PASS: %s Read. Expected %0d, Actual %0d.", $time, name, exp_msb, actual_rdata);
+        end else begin
+            $error("[%0t] [SCB-COR] FAIL: %s Mismatch! Expected %0d, Actual %0d.", $time, name, exp_msb, actual_rdata);
+        end
+        my_count[15:8] = 8'h00; 
+    endfunction
+endclass
