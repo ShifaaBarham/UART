@@ -24,11 +24,12 @@ class uart_Monitor #(parameter DATA_WIDTH=8);
       logic expected_parity;
 
         wait(vif.rst == 0);
-        clks_per_bit = cfg.get_clks_per_bit();
-        half_clks = clks_per_bit / 2;
+       
       
       forever 
         begin 
+           clks_per_bit = cfg.get_clks_per_bit();
+        half_clks = clks_per_bit / 2;
             t = new();
             t.detect_parity_err = 0; 
             t.detect_checksum_err = 0;
