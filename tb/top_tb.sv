@@ -15,34 +15,32 @@ module tb_top;
   UART_if        #(8)      vif_uart_tx(clk, rst_n);
   UART_if        #(8)      vif_uart_rx(clk, rst_n);
 
-  // DUT Instantiation - الربط مع مراعاة أسماء الـ Ports في الديزاين تبعك
   UART DUT (
     .clk(clk),
-    .rstn(rst_n), // تأكد إذا الاسم rstn أو rst_n في الديزاين
+    .rstn(rst_n), 
     
-    // Config IF
     .cfg_valid(vif_config.valid),
     .cfg_ready(vif_config.ready),
     .cfg_addr(vif_config.addr),
-    .cfg_data_in(vif_config.wdata),  // الربط الصحيح
-    .cfg_data_out(vif_config.rdata), // الربط الصحيح
-    .cfg_op(vif_config.ctrl),        // الربط الصحيح (op = ctrl)
+    .cfg_data_in(vif_config.wdata),  
+    .cfg_data_out(vif_config.rdata), 
+    .cfg_op(vif_config.ctrl),       
     
     // TX VR IF
     .tx_valid(vif_vr_tx.valid),
     .tx_ready(vif_vr_tx.ready),
-    .tx_err(vif_vr_tx.tx_err),       // تأكد أن الـ IF فيه tx_err
+    .tx_err(vif_vr_tx.tx_err),     
     .tx_data(vif_vr_tx.wdata),
     
     // RX VR IF
     .rx_valid(vif_vr_rx.valid),
     .rx_ready(vif_vr_rx.ready),
     .rx_data(vif_vr_rx.rdata),
-    .Rx_err(vif_vr_rx.rx_err),       // مخرج الخطأ من الديزاين للـ Monitor
+    .Rx_err(vif_vr_rx.rx_err),       
     
     // UART Serial
-    .RX(vif_uart_rx.rx), // Driver drives this
-    .TX(vif_uart_tx.rx)  // Monitor monitors this (DUT TX -> Monitor RX)
+    .RX(vif_uart_rx.rx), 
+    .TX(vif_uart_tx.rx)  
   );
 
   // Reset Sequence
@@ -53,7 +51,7 @@ module tb_top;
   end
 
   initial begin
-    test_reg_rw_access test; // أو أي تست فرعي 
+    test_reg_rw_access test; 
     test = new(vif_config, vif_vr_tx, vif_vr_rx, vif_uart_tx, vif_uart_rx);
     test.run();
   end
