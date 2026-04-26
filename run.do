@@ -17,8 +17,7 @@ vlog -sv +incdir+./tb/agents/vr_agent +incdir+./tb/agents/uart_agent +incdir+./t
   ./tb/top_tb.sv
 
 # 3. Run Simulation (with the testname passed as an argument)
-# يمكنك تغيير اسم التست هنا بسهولة
-vsim -gui -voptargs="+acc" work.tb_top +TESTNAME=test_config_read_backpressure
+vsim -gui -voptargs="+acc" work.tb_top +TESTNAME=test_invalid_address_access
 
 # 4. Add waves (Optional - if you want to see the signals)
 # add wave -position insertpoint sim:/tb_top/*
