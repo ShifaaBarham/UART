@@ -1,8 +1,4 @@
-interface UART_if #(parameter DATA_WIDTH=8) (input logic clk,input logic rst) ;
-  
- 
+interface UART_if #(parameter DATA_WIDTH=32) (input logic clk,input logic rst) ; 
    logic tx;
    logic rx;
-  
-  
-endinterface 
+  endinterface 

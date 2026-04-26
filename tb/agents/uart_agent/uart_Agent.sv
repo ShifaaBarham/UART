@@ -1,5 +1,5 @@
 
-class UART_Agent #(parameter DATA_WIDTH=8) ;
+class UART_Agent #(parameter DATA_WIDTH=32) ;
   
   uart_Driver #( DATA_WIDTH) drv;
   uart_Monitor #( DATA_WIDTH) mon;
