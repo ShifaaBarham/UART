@@ -1,4 +1,4 @@
-class VR_Agent #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=8) ;
+class VR_Agent #(parameter DATA_WIDTH=32 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=1) ;
   
   vr_Driver #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) drv;
   vr_Monitor #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) mon;
@@ -9,16 +9,16 @@ class VR_Agent #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTR
   
   function new(vr_Agent_config #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) agent_config,
                mailbox #(vr_Transaction #( DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH)) vr_mon_mbx,
-               mailbox #(vr_Transaction #( DATA_WIDTH,ADDRESS_WIDTH, CTRL_WIDTH)) vr_drv_mbx = null // Optional for monitor-only agents );
-  );
+               mailbox #(vr_Transaction #( DATA_WIDTH,ADDRESS_WIDTH, CTRL_WIDTH)) vr_drv_mbx = null ); 
+               
         this.agent_config=agent_config;
         this.vr_drv_mbx=vr_drv_mbx;
         this.vr_mon_mbx=vr_mon_mbx;
 
-        mon=new(agent_config.vif,vr_mon_mbx);
+        mon = new(agent_config.vif, vr_mon_mbx, agent_config);
 
         if(agent_config.is_active == 1)
-          drv=new(agent_config.vif , vr_drv_mbx,agent_config);    
+          drv=new(agent_config.vif, vr_drv_mbx, agent_config);    
   endfunction 
       
       task run();
