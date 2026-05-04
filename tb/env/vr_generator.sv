@@ -35,7 +35,7 @@ endtask
       tr = new();
       
       tr.addr = 8'h00; 
-      tr.ctrl = 1'b1; 
+      tr.ctrl = 1'b1; // Write operation always for TX traffic
       tr.wdata = $urandom(); 
       
       rand_val = $urandom_range(0, 99);
@@ -49,7 +49,7 @@ endtask
              $time, num_transactions, err_rate, min_delay, max_delay);
   endtask
 
-  task drive_rx_ready_responses(int num_responses, int min_delay = 0, int max_delay = 0);
+  task drive_rx_ready_responses(int num_responses, int min_delay = 0, int max_delay = 0);// This task is used by the SLAVE agent to generate ready responses for incoming transactions for backpressure testing
     vr_Transaction #(DATA_WIDTH, ADDRESS_WIDTH, CTRL_WIDTH) tr;
     for(int i=0; i<num_responses; i++) begin
       tr = new();

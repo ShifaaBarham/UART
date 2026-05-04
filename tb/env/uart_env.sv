@@ -3,33 +3,33 @@ class uart_env;
   VR_Agent #(8,8,1)   agt_config;
   VR_Agent #(32,8,1)  agt_vr_tx;
   VR_Agent #(32,8,1)  agt_vr_rx;
-  UART_Agent #(8)     agt_uart_tx;
-  UART_Agent #(8)     agt_uart_rx;
+  UART_Agent #(32)     agt_uart_tx;
+  UART_Agent #(32)     agt_uart_rx;
 
   vr_Agent_config #(8,8,1)   cfg_config;
   vr_Agent_config #(32,8,1)  cfg_vr_tx;
   vr_Agent_config #(32,8,1)  cfg_vr_rx;
-  uart_Agent_config #(8)     cfg_uart_tx;
-  uart_Agent_config #(8)     cfg_uart_rx;
+  uart_Agent_config #(32)     cfg_uart_tx;
+  uart_Agent_config #(32)     cfg_uart_rx;
 
   scoreboard sb;
 
   mailbox #(vr_Transaction #(8,8,1))   mbx_config_drv, mbx_config_mon;
   mailbox #(vr_Transaction #(32,8,1))  mbx_vr_tx_drv,  mbx_vr_tx_mon;
   mailbox #(vr_Transaction #(32,8,1))  mbx_vr_rx_drv,  mbx_vr_rx_mon;
-  mailbox #(uart_Transaction #(8))     mbx_uart_tx_mon;
-  mailbox #(uart_Transaction #(8))     mbx_uart_rx_drv, mbx_uart_rx_mon;
+  mailbox #(uart_Transaction #(32))     mbx_uart_tx_mon;
+  mailbox #(uart_Transaction #(32))     mbx_uart_rx_drv, mbx_uart_rx_mon;
 
   function new( vr_Agent_config #(8,8,1)  c_cfg,
                 vr_Agent_config #(32,8,1) c_v_tx,
                 vr_Agent_config #(32,8,1) c_v_rx,
-                uart_Agent_config #(8)    c_u_tx,
-                uart_Agent_config #(8)    c_u_rx,
+                uart_Agent_config #(32)    c_u_tx,
+                uart_Agent_config #(32)    c_u_rx,
 
                 mailbox #(vr_Transaction #(8,8,1))   mbx_config_drv,
                 mailbox #(vr_Transaction #(32,8,1))  mbx_vr_tx_drv,  
                 mailbox #(vr_Transaction #(32,8,1))  mbx_vr_rx_drv,
-                mailbox #(uart_Transaction #(8))     mbx_uart_rx_drv
+                mailbox #(uart_Transaction #(32))     mbx_uart_rx_drv
               );
 
         this.cfg_config  = c_cfg;
