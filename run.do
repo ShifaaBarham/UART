@@ -16,12 +16,16 @@ vlog -sv +incdir+./tb/agents/vr_agent +incdir+./tb/agents/uart_agent +incdir+./t
   ./DUT/design.sv \
   ./tb/top_tb.sv
 
-# 3. Run Simulation (with the testname passed as an argument)
-# يمكنك تغيير اسم التست هنا بسهولة
-vsim -gui -voptargs="+acc" work.tb_top +TESTNAME=test_config_read_backpressure
+# 3. Handle arguments safely (Anti-Crash logic)
+set arg1 ""
+set arg2 ""
+set arg3 ""
+if {[info exists 1]} { set arg1 $1 }
+if {[info exists 2]} { set arg2 $2 }
+if {[info exists 3]} { set arg3 $3 }
 
-# 4. Add waves (Optional - if you want to see the signals)
-# add wave -position insertpoint sim:/tb_top/*
+# 4. Run Simulation with arguments (if any)
+vsim -gui -voptargs="+acc" work.tb_top $arg1 $arg2 $arg3
 
 # 5. Run
 run -all
