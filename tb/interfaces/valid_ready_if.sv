@@ -1,4 +1,4 @@
-interface valid_ready_if  #(parameter DATA_WIDTH=8 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=8) (input logic clk,input logic rst) ;
+interface valid_ready_if  #(parameter DATA_WIDTH=32 ,parameter ADDRESS_WIDTH=8,parameter CTRL_WIDTH=1) (input logic clk,input logic rst) ;
   
   
      
