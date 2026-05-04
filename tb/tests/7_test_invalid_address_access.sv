@@ -3,8 +3,8 @@ class test_invalid_address_access extends base_test;
   function new( virtual valid_ready_if #(8,8,1)  v_cfg,
                 virtual valid_ready_if #(32,8,1) v_tx,
                 virtual valid_ready_if #(32,8,1) v_rx,
-                virtual UART_if        #(8)      u_tx,
-                virtual UART_if        #(8)      u_rx );
+                virtual UART_if        #(32)      u_tx,
+                virtual UART_if        #(32)      u_rx );
     super.new(v_cfg, v_tx, v_rx, u_tx, u_rx);
   endfunction
 
@@ -21,7 +21,7 @@ class test_invalid_address_access extends base_test;
     
     read_register(8'h14); 
     
-    #200;
+    #2000000;
   endtask
 
 endclass
