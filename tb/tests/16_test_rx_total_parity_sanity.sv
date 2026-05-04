@@ -3,33 +3,38 @@ class test_rx_total_parity_sanity extends base_test;
   function new( virtual valid_ready_if #(8,8,1)  v_cfg,
                 virtual valid_ready_if #(32,8,1) v_tx,
                 virtual valid_ready_if #(32,8,1) v_rx,
-                virtual UART_if        #(8)      u_tx,
-                virtual UART_if        #(8)      u_rx );
+                virtual UART_if        #(32)     u_tx,
+                virtual UART_if        #(32)     u_rx );
     super.new(v_cfg, v_tx, v_rx, u_tx, u_rx);
   endfunction
 
-  virtual task main_test();
-    uart_Transaction #(8) rx_trans;
+  virtual task configure_dut();
+    $display("[%0t] [TEST 11] Configuring DUT...", $time);
     
-    $display("[%0t] [TEST 16] Executing test_rx_total_parity_sanity.", $time);
-        $display("=================================================");
+    write_register(8'h24, 8'h0E); // PPB=0, Parity=Even, Baud=9600, Stop=1 0000 1000
+    read_register(8'h24);
 
-    write_register(8'h24, 8'h00);
-    
-    
-    for (int i = 0; i < 4; i++) begin
-      rx_trans = new();
-      rx_trans.data = 8'h5A; 
+    env.cfg_uart_rx.ppb_enable =0;        
+    env.cfg_uart_rx.parity_mode = EVEN;    
+    env.cfg_uart_rx.cfg_baud_rate = B57600; 
+    env.cfg_uart_rx.stop_bits = 1;         
       
-      env.agt_uart_rx.uart_drv_mbx.put(rx_trans);
-      $display("[%0t] [TEST 16] Injected RX Byte %0d.", $time, i);
-      
-      #20;
-    end
-    
-    $display("[%0t] [TEST 16] Finished injecting 32-bit frame. DUT should verify ONE total parity bit.", $time);
-    
-    #1000;
+    #100000; 
   endtask
 
+  virtual task main_test();
+   $display("[%0t] [TEST_RX_SANITY] Running: test_rx_sanity", $time);
+  $display("=================================================");
+
+      fork
+    gen_uart_rx.send_rx_traffic(5, 0, 0, 0, 500,1000);
+        gen_vr_rx.drive_rx_ready_responses(5, 100, 200);
+      join
+
+repeat (20000) @(posedge vif_config.clk);
+  if (env.sb.expected_vr_rx_q.size() > 0)
+    $error("[%0t] [TEST_RX_SANITY] FAIL: queue size=%0d", $time, env.sb.expected_vr_rx_q.size());
+  else
+    $display("[%0t] [TEST_RX_SANITY] PASS", $time);
+endtask
 endclass
